@@ -2,6 +2,8 @@ package com.thesis.electronic_invoice.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +17,12 @@ public class MstInvoices extends BaseModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "INVOICE_ID", updatable = false, nullable = false)
     private UUID invoiceId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private MstUsers admin;
 
     @Column(name = "ISSUED_DT", nullable = false)
     private LocalDate issuedDt;

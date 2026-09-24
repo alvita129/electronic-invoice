@@ -26,6 +26,8 @@ CREATE TABLE MST_USERS (
 CREATE TABLE MST_INVOICES (
                               INVOICE_ID UUID PRIMARY KEY,
 
+                              USER_ID UUID NOT NULL,
+
                               ISSUED_DT DATE NOT NULL,
                               INVOICE_NUMBER VARCHAR(100) NOT NULL UNIQUE,
                               DUE_DT DATE NOT NULL,
@@ -35,7 +37,11 @@ CREATE TABLE MST_INVOICES (
                               CREATED_DT TIMESTAMP,
                               CREATED_BY VARCHAR(100),
                               UPDATED_DT TIMESTAMP,
-                              UPDATED_BY VARCHAR(100)
+                              UPDATED_BY VARCHAR(100),
+
+                              CONSTRAINT FK_INVOICE_USER
+                                  FOREIGN KEY (USER_ID)
+                                      REFERENCES MST_USERS(USER_ID)
 );
 
 -- =====================================================
