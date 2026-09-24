@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnTransformer;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -39,7 +40,8 @@ public class AuditTrails implements Serializable {
     @Enumerated(EnumType.STRING)
     private AuditAction action;
 
-    @Column(name = "AUDIT_DETAILS", length = 10000)
+    @Column(name = "AUDIT_DETAILS", columnDefinition = "jsonb")
+    @ColumnTransformer(write = "?::jsonb")
     private String auditDetails;
 
     @Column(name = "LOG_DT")

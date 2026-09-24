@@ -115,7 +115,7 @@ CREATE TABLE AUDIT_TRAILS (
 
                                   ACTION VARCHAR(50) NOT NULL,
 
-                                  AUDIT_DETAILS TEXT,
+                                  AUDIT_DETAILS JSONB,
 
                                   LOG_DT TIMESTAMP NOT NULL,
 
