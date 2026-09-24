@@ -30,6 +30,7 @@ CREATE TABLE MST_INVOICES (
 
                               ISSUED_DT DATE NOT NULL,
                               INVOICE_NUMBER VARCHAR(100) NOT NULL UNIQUE,
+                              INVOICE_STATUS VARCHAR(50),
                               DUE_DT DATE NOT NULL,
 
                               TOTAL_AMOUNT NUMERIC(18,2) NOT NULL,

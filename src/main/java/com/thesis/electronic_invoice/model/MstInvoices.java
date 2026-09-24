@@ -1,5 +1,6 @@
 package com.thesis.electronic_invoice.model;
 
+import com.thesis.electronic_invoice.constant.InvoiceStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,9 @@ public class MstInvoices extends BaseModel {
 
     @Column(name = "INVOICE_NUMBER", nullable = false, unique = true)
     private String invoiceNumber;
+
+    @Column(name = "INVOICE_STATUS", nullable = false)
+    private InvoiceStatus invoiceStatus;
 
     @Column(name = "DUE_DT", nullable = false)
     private LocalDate dueDt;
