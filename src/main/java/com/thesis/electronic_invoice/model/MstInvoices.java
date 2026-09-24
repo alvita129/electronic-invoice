@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TRX_INVOICES")
+@Table(name = "MST_INVOICES")
 @Data
-public class TrxInvoices extends BaseModel {
+public class MstInvoices extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "INVOICE_ID", updatable = false, nullable = false)

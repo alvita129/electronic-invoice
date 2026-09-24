@@ -9,9 +9,9 @@ import lombok.ToString;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TRX_APPROVAL_WORKFLOWS")
+@Table(name = "APPROVAL_WORKFLOWS")
 @Data
-public class TrxApprovalWorkflows extends BaseModel {
+public class ApprovalWorkflows extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "APPROVAL_WORKFLOW_ID", updatable = false, nullable = false)
@@ -21,7 +21,7 @@ public class TrxApprovalWorkflows extends BaseModel {
     @JoinColumn(name = "INVOICE_ID", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private TrxInvoices invoice;
+    private MstInvoices invoice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)

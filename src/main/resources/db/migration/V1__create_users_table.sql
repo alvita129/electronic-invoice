@@ -20,10 +20,10 @@ CREATE TABLE MST_USERS (
 );
 
 -- =====================================================
--- TRX_INVOICES
+-- MST_INVOICES
 -- =====================================================
 
-CREATE TABLE TRX_INVOICES (
+CREATE TABLE MST_INVOICES (
                               INVOICE_ID UUID PRIMARY KEY,
 
                               ISSUED_DT DATE NOT NULL,
@@ -39,10 +39,10 @@ CREATE TABLE TRX_INVOICES (
 );
 
 -- =====================================================
--- TRX_INVOICE_ITEMS
+-- INVOICE_ITEMS
 -- =====================================================
 
-CREATE TABLE TRX_INVOICE_ITEMS (
+CREATE TABLE INVOICE_ITEMS (
                                    INVOICE_ITEMS_ID UUID PRIMARY KEY,
 
                                    INVOICE_ID UUID NOT NULL,
@@ -61,15 +61,15 @@ CREATE TABLE TRX_INVOICE_ITEMS (
 
                                    CONSTRAINT FK_INVOICE_ITEMS
                                        FOREIGN KEY (INVOICE_ID)
-                                           REFERENCES TRX_INVOICES(INVOICE_ID)
+                                           REFERENCES MST_INVOICES(INVOICE_ID)
                                            ON DELETE CASCADE
 );
 
 -- =====================================================
--- TRX_APPROVAL_WORKFLOWS
+-- APPROVAL_WORKFLOWS
 -- =====================================================
 
-CREATE TABLE TRX_APPROVAL_WORKFLOWS (
+CREATE TABLE APPROVAL_WORKFLOWS (
                                         APPROVAL_WORKFLOW_ID UUID PRIMARY KEY,
 
                                         INVOICE_ID UUID NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE TRX_APPROVAL_WORKFLOWS (
 
                                         CONSTRAINT FK_APPROVAL_INVOICE
                                             FOREIGN KEY (INVOICE_ID)
-                                                REFERENCES TRX_INVOICES(INVOICE_ID)
+                                                REFERENCES MST_INVOICES(INVOICE_ID)
                                                 ON DELETE CASCADE,
 
                                         CONSTRAINT FK_APPROVAL_USER
@@ -97,10 +97,10 @@ CREATE TABLE TRX_APPROVAL_WORKFLOWS (
 );
 
 -- =====================================================
--- TRX_AUDIT_TRAILS
+-- AUDIT_TRAILS
 -- =====================================================
 
-CREATE TABLE TRX_AUDIT_TRAILS (
+CREATE TABLE AUDIT_TRAILS (
                                   AUDIT_TRAILS_ID UUID PRIMARY KEY,
 
                                   INVOICE_ID UUID NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE TRX_AUDIT_TRAILS (
 
                                   CONSTRAINT FK_AUDIT_INVOICE
                                       FOREIGN KEY (INVOICE_ID)
-                                          REFERENCES TRX_INVOICES(INVOICE_ID)
+                                          REFERENCES MST_INVOICES(INVOICE_ID)
                                           ON DELETE CASCADE,
 
                                   CONSTRAINT FK_AUDIT_USER

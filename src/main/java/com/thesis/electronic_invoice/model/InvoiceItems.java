@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TRX_INVOICE_ITEMS")
+@Table(name = "INVOICE_ITEMS")
 @Data
-public class TrxInvoiceItems extends BaseModel {
+public class InvoiceItems extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "INVOICE_ITEMS_ID", updatable = false, nullable = false)
@@ -21,7 +21,7 @@ public class TrxInvoiceItems extends BaseModel {
     @JoinColumn(name = "INVOICE_ID", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private TrxInvoices invoice;
+    private MstInvoices invoice;
 
     @Column(name = "ITEM_NAME")
     private String itemName;

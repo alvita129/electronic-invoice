@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TRX_AUDIT_TRAILS")
+@Table(name = "AUDIT_TRAILS")
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TrxAuditTrails implements Serializable {
+public class AuditTrails implements Serializable {
     private static final long serialVersionUID = 783719346636305093L;
 
     @Id
@@ -27,7 +27,7 @@ public class TrxAuditTrails implements Serializable {
     @JoinColumn(name = "INVOICE_ID", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private TrxInvoices invoice;
+    private MstInvoices invoice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
