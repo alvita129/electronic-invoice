@@ -32,6 +32,7 @@ public class MstInvoices extends BaseModel {
     private String invoiceNumber;
 
     @Column(name = "INVOICE_STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
     @Column(name = "DUE_DT", nullable = false)
@@ -39,4 +40,7 @@ public class MstInvoices extends BaseModel {
 
     @Column(name = "TOTAL_AMOUNT", nullable = false)
     private BigDecimal totalAmount;
+
+    @Column(name = "ARCHIVED", nullable = false)
+    private boolean archived;
 }

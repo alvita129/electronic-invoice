@@ -24,7 +24,7 @@ public class ApprovalWorkflows extends BaseModel {
     private MstInvoices invoice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private MstUsers approver;
@@ -35,7 +35,7 @@ public class ApprovalWorkflows extends BaseModel {
     @Column(name = "REMARKS")
     private String remarks;
 
-    @Column(name = "APPROVAL_STATUS")
+    @Column(name = "APPROVAL_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
 }

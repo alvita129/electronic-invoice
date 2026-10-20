@@ -1,5 +1,7 @@
 package com.thesis.electronic_invoice.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thesis.electronic_invoice.dto.response.ResponseDTO;
 import com.thesis.electronic_invoice.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,13 +60,26 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // stateless JWT API, no need for CSRF token
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            objectMapper.writeValue(response.getOutputStream(), ResponseDTO.error(401, "Authentication is required", java.util.Map.of()));
+                        })
+                        .accessDeniedHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            objectMapper.writeValue(response.getOutputStream(), ResponseDTO.error(403, "You don't have permission to access this resource", java.util.Map.of()));
+                        }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/**").authenticated()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
-                        .requestMatchers("/api/invoices/*/audit-trail").hasRole("ADMIN")
+                        .requestMatchers("/api/invoices/*/trail").hasRole("ADMIN")
+                        .requestMatchers("/api/audit-trail/**").hasRole("ADMIN")
                         .requestMatchers("/api/invoices/**").hasRole("ADMIN")
-                        .requestMatchers("/api/approvals/**").hasAnyRole("APPROVER_L1", "APPROVER_L2")
+                        .requestMatchers("/api/approvals/**").hasAnyRole("APPROVER_LV1", "APPROVER_LV2")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

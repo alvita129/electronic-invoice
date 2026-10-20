@@ -25,7 +25,7 @@ public class AuditTrails implements Serializable {
     private UUID auditTrailsId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "INVOICE_ID", nullable = false)
+    @JoinColumn(name = "INVOICE_ID")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private MstInvoices invoice;

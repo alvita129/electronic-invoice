@@ -17,13 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MstUsers user = userRepository.findByUsername(username)
+        MstUsers user = userRepository.findByUsernameAndActiveTrue(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities("ROLE_" + user.getUserRole().name())
+                .disabled(!user.isActive())
                 .build();
     }
 }

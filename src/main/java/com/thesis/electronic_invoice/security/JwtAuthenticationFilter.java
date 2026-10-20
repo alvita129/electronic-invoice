@@ -1,5 +1,7 @@
 package com.thesis.electronic_invoice.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thesis.electronic_invoice.dto.response.ResponseDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
@@ -49,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
-                    var authToken = new UsernamePasswordAuthenticationToken(
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -59,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JwtService.InvalidTokenException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"status\":401,\"message\":\"" + e.getMessage() + "\"}");
+            objectMapper.writeValue(response.getOutputStream(), ResponseDTO.error(401, e.getMessage(), java.util.Map.of()));
         }
     }
 }

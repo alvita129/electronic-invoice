@@ -15,7 +15,7 @@ public class MstUsers extends BaseModel {
     @Column(name = "USER_ID", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "USERNAME", nullable = false, unique = true)
+    @Column(name = "USERNAME", nullable = false)
     private String username;
 
     @Column(name = "PASSWORD", nullable = false)
@@ -33,4 +33,7 @@ public class MstUsers extends BaseModel {
 
     @Column(name = "EMAIL")
     private String email;
+
+    @Column(name = "ACTIVE", nullable = false)
+    private boolean active = true;
 }

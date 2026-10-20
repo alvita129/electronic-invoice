@@ -32,6 +32,9 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-3600000}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      BOOTSTRAP_ADMIN_FIRST_NAME: ${BOOTSTRAP_ADMIN_FIRST_NAME:-System}
       JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
       SERVER_PORT: 8080
     ports:
@@ -39,7 +42,7 @@ services:
 
   frontend:
     build:
-      context: ../frontend
+      context: ../electronic-invoice-fe
       dockerfile: Dockerfile
     container_name: einvoice-frontend
     restart: unless-stopped
