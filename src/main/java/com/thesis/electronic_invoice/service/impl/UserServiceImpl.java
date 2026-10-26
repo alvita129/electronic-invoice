@@ -59,6 +59,8 @@ public class UserServiceImpl implements UserService {
     public LoginResponse.UserView update(UUID id, UserRequest request) {
         MstUsers user = users.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if ("admin".equalsIgnoreCase(user.getUsername()))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "The system admin account cannot be edited");
         MstUsers actor = currentUser.get();
         Map<String, Object> before = snapshot(user);
         if (!actor.getUserId().equals(id)
