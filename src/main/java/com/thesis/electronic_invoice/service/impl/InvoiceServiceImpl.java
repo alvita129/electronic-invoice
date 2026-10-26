@@ -138,7 +138,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional(readOnly = true)
     public List<InvoiceView> pending(UserRole role) {
-        return approvals.findByApproverUserRoleAndApprovalStatusOrderByCreatedDtAsc(role, ApprovalStatus.PENDING).stream().filter(a -> (a.getLevel() == 1 && a.getInvoice().getInvoiceStatus() == InvoiceStatus.SUBMITTED) || (a.getLevel() == 2 && a.getInvoice().getInvoiceStatus() == InvoiceStatus.APPROVED_LV1)).map(a -> view(a.getInvoice())).distinct().toList();
+        return approvals.findByApproverUserRoleAndApprovalStatusOrderByCreatedDtDesc(role, ApprovalStatus.PENDING).stream().filter(a -> (a.getLevel() == 1 && a.getInvoice().getInvoiceStatus() == InvoiceStatus.SUBMITTED) || (a.getLevel() == 2 && a.getInvoice().getInvoiceStatus() == InvoiceStatus.APPROVED_LV1)).map(a -> view(a.getInvoice())).distinct().toList();
     }
 
     @Transactional

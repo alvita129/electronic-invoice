@@ -1,6 +1,7 @@
 package com.thesis.electronic_invoice.controller;
 
 import com.thesis.electronic_invoice.dto.request.LoginRequest;
+import com.thesis.electronic_invoice.dto.request.ChangePasswordRequest;
 import com.thesis.electronic_invoice.dto.request.ProfileUpdateRequest;
 import com.thesis.electronic_invoice.dto.response.LoginResponse;
 import com.thesis.electronic_invoice.dto.response.ResponseDTO;
@@ -34,5 +35,11 @@ public class AuthController {
     @PutMapping("/profile")
     public ResponseDTO<LoginResponse.UserView> updateProfile(@Valid @RequestBody ProfileUpdateRequest request) {
         return ResponseDTO.success("Profile updated", authService.updateProfile(request));
+    }
+
+    @PutMapping("/password")
+    public ResponseDTO<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        authService.changePassword(request);
+        return ResponseDTO.success("Password changed successfully", null);
     }
 }

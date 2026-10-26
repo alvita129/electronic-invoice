@@ -13,5 +13,6 @@ public enum AuditAction {
     APPROVE_LV1,
     APPROVE_LV2,
     REJECT,
-    RETURN_TO_ADMIN
+    RETURN_TO_ADMIN,
+    PASSWORD_CHANGE
 }

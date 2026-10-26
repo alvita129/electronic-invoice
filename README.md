@@ -14,6 +14,50 @@ The backend uses interface-driven layers: controllers depend on service interfac
 
 For a full container setup, configure the same required secrets in `.env` and run `docker compose up --build`. The UI is available on port `5173`; PostgreSQL remains on `5433`.
 
+## Public user testing deployment (Render)
+
+The frontend and backend are separate repositories, so create the services separately in Render. Put the PostgreSQL database, backend, and frontend in the same region.
+
+### 1. Create PostgreSQL
+
+Create a managed PostgreSQL database. Use its **internal** connection details for the backend. The backend expects a JDBC URL, for example:
+
+```text
+jdbc:postgresql://HOST:5432/DATABASE
+```
+
+Do not make the database publicly reachable for this setup.
+
+### 2. Deploy the backend
+
+Create a Render Web Service from this repository and use its Dockerfile. Set the health check path to `/actuator/health`. Add these environment variables in the Render dashboard (never commit secret values):
+
+| Variable | Value |
+| --- | --- |
+| `DB_URL` | JDBC URL built from the database's internal host and database name |
+| `DB_USERNAME` | Database username |
+| `DB_PASSWORD` | Database password |
+| `JWT_SECRET` | Base64-encoded random secret of at least 32 bytes; generate with `openssl rand -base64 32` |
+| `BOOTSTRAP_ADMIN_USERNAME` | A private admin username for testing |
+| `BOOTSTRAP_ADMIN_PASSWORD` | A unique password of at least 8 characters |
+| `BOOTSTRAP_ADMIN_FIRST_NAME` | Admin's displayed first name |
+| `CORS_ALLOWED_ORIGINS` | The exact deployed frontend origin, e.g. `https://your-frontend.onrender.com` |
+| `JPA_SHOW_SQL` | `false` |
+
+Render supplies `PORT`; the backend now uses it automatically. The bootstrap admin is created only if the database has no users. Save its credentials securely and change them after first sign-in if needed.
+
+### 3. Deploy the frontend
+
+Create a Render Static Site from the frontend repository with:
+
+- Build command: `npm ci && npm run build`
+- Publish directory: `dist`
+- Build environment variable `VITE_API_URL`: `https://YOUR-BACKEND.onrender.com/api`
+
+Add a rewrite rule from `/*` to `/index.html` with status `200` so React Router routes work on refresh. After Render gives the frontend its URL, put that exact origin in the backend's `CORS_ALLOWED_ORIGINS` and redeploy the backend.
+
+`VITE_API_URL` is included in public browser code, so it must contain only the API URL, never credentials or secrets. Use test accounts and dummy invoice data for public testing.
+
 ## Roles and workflow
 
 - `ADMIN` manages users, creates and edits drafts or returned invoices, submits invoices, archives drafts, and views invoice audit histories.

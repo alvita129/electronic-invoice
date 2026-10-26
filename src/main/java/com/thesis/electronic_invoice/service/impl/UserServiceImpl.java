@@ -94,6 +94,8 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot delete your own account");
         MstUsers user = users.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if ("admin".equalsIgnoreCase(user.getUsername()))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "The system admin account cannot be deleted");
         Map<String, Object> before = snapshot(user);
         if (approvals.existsByApproverUserIdAndApprovalStatus(id, ApprovalStatus.PENDING))
             throw new ResponseStatusException(HttpStatus.CONFLICT,

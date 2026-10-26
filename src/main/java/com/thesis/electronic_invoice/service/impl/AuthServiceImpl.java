@@ -3,6 +3,7 @@ package com.thesis.electronic_invoice.service.impl;
 import com.thesis.electronic_invoice.config.JwtProperties;
 import com.thesis.electronic_invoice.constant.AuditAction;
 import com.thesis.electronic_invoice.dto.request.LoginRequest;
+import com.thesis.electronic_invoice.dto.request.ChangePasswordRequest;
 import com.thesis.electronic_invoice.dto.request.ProfileUpdateRequest;
 import com.thesis.electronic_invoice.dto.response.LoginResponse;
 import com.thesis.electronic_invoice.repository.UsersRepository;
@@ -58,15 +59,25 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public LoginResponse.UserView updateProfile(ProfileUpdateRequest request) {
         MstUsers user = currentUser.get();
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            if (request.getPassword().length() < 8)
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be at least 8 characters");
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
         user.setFirstName(request.getFirstName().trim());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         return userView(users.save(user));
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordRequest request) {
+        MstUsers user = currentUser.get();
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
+        }
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password must be different from the current password");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        users.save(user);
+        audit.recordAuthentication(user, AuditAction.PASSWORD_CHANGE);
     }
 
     private LoginResponse.UserView userView(MstUsers user) {

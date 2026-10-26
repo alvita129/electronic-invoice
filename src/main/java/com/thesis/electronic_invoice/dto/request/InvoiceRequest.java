@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class InvoiceRequest {
     @NotBlank
+    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "Invoice number can contain letters and numbers only")
     private String invoiceNumber;
     @NotNull
     private LocalDate issuedDt;

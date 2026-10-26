@@ -13,11 +13,11 @@ import com.thesis.electronic_invoice.constant.UserRole;
 public interface ApprovalWorkflowsRepository extends JpaRepository<ApprovalWorkflows, UUID> {
     List<ApprovalWorkflows> findByInvoiceInvoiceIdOrderByLevelAscCreatedDtAsc(UUID invoiceId);
 
-    List<ApprovalWorkflows> findByApproverUsernameAndApprovalStatusOrderByCreatedDtAsc(String username, ApprovalStatus status);
+    List<ApprovalWorkflows> findByApproverUsernameAndApprovalStatusOrderByCreatedDtDesc(String username, ApprovalStatus status);
 
     Optional<ApprovalWorkflows> findFirstByInvoiceInvoiceIdAndLevelAndApprovalStatus(UUID invoiceId, Integer level, ApprovalStatus status);
 
-    List<ApprovalWorkflows> findByApproverUserRoleAndApprovalStatusOrderByCreatedDtAsc(UserRole role, ApprovalStatus status);
+    List<ApprovalWorkflows> findByApproverUserRoleAndApprovalStatusOrderByCreatedDtDesc(UserRole role, ApprovalStatus status);
 
     boolean existsByApproverUserIdAndApprovalStatus(UUID userId, ApprovalStatus status);
 }
