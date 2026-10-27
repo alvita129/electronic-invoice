@@ -151,8 +151,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice.getInvoiceStatus() != expected)
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Invoice is not awaiting your approval level");
         ApprovalWorkflows step = approvals.findFirstByInvoiceInvoiceIdAndLevelAndApprovalStatus(id, level, ApprovalStatus.PENDING).orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "No pending approval step"));
-        if (!step.getApprover().getUserId().equals(actor.getUserId()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invoice is assigned to another approver");
         if (decision != ApprovalDecision.APPROVE && (remarks == null || remarks.isBlank()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reason is required for reject or return");
         InvoiceView before = view(invoice);
